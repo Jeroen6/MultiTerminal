@@ -1,0 +1,22 @@
+Buglist:
+- Unresolved
+x Resolved
+* Feature disable
+? Not sure if bug or feature
+[ Reason or cause ]
+
+Prepend list from top
+----------
+x   Scaling Wipe button in views must be nonscaling
+x   Config only local tickbox not persistent
+x   Remove scroll button from view
+x   Disable line wrapping in views, it results in very slow resizing
+x   AutoScroll main input not working
+x   Read only textviewers in views
+x   Unkown error after streaming file,
+    and connect and disconnect are both on,
+    also driver stays running
+    [incomplete driver, limited exit code, cannot be solved yet]
+?	in Config window, updating the Serial List leaks QTreeWidgetsItems
+x	Create filter A, delete filter A, create filter A -> segfault
+	Issue when recycling identifiers?

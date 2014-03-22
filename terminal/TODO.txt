@@ -1,0 +1,47 @@
+Status:
+- = Planned.
+X = In progress, some work done.
+* = Done.
+? = Not sure if worth the effort or useful at all.
+N = Decided against.
+
+Prepend versions on list from top (oldest at bottom)
+----------
+
+Version 2:
+? multiplatform driver call
+? Automatic arrangement of view location on Desktop
+
+Version 1
+- Have some feedback and detection mechanism for faulty baudrate setting
+- Show bytes/s and number of visible bytes in each view
+- Ability to save a file in raw and each view
+- Improve settings window
+- QSettings or XML file for settings, or maybe even .term config files
+? Always save contents to file session
+- Data events
+    - Create new file session on request of debug target
+    - Clear screens on request of debug target
+- Live Graphing
+- Retroactive filtering when creating a brand new filter based on the current textInput text.
+- Auto reconnect implementation
+- Filter colors in raw view
+- Sort list of filters alfabetically
+- Up and Down arrows navigate filterList in mainWindow
+- History in send textbox
+
+Version 0
+* Checkbox disables when closing view
+* Ability to open a file (///@todo fix file reading)
+* Escape string entered in send box to support basic \n\t\r stuff
+* Autoscroll feature on raw input
+* Wipe button raw input
+* About window
+* Connect arguments in settings view
+* Basic settings window for serial and tcp
+* main icon
+* Wipe all button
+* SerialDriver
+
+
+

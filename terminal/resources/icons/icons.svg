@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Gegenereerd door Microsoft Visio 11.0, SVG Export, v1.0 icons.svg Main -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="0.333333in"
+		height="0.333333in" viewBox="0 0 24 24" xml:space="preserve" color-interpolation-filters="sRGB" class="st3">
+	<v:documentProperties v:langID="1033" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:none;stroke:none;stroke-linecap:butt;stroke-width:0.75}
+		.st2 {fill:#000000;stroke:none;stroke-linecap:butt;stroke-width:0.75}
+		.st3 {fill:none;fill-rule:evenodd;font-size:12;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="4" v:index="2" v:groupContext="foregroundPage">
+		<title>Main</title>
+		<v:pageProperties v:drawingScale="1" v:pageScale="1" v:drawingUnits="19" v:shadowOffsetX="9" v:shadowOffsetY="-9"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape" transform="translate(0.009375,-0.009375)">
+			<title>Blad.1</title>
+			<rect x="0" y="0" width="24" height="24" class="st1"/>
+		</g>
+		<g id="shape2-3" v:mID="2" v:groupContext="shape" transform="translate(10.5,0)">
+			<title>Blad.2</title>
+			<rect x="0" y="0.103125" width="3" height="23.8969" class="st2"/>
+		</g>
+		<g id="shape5-5" v:mID="5" v:groupContext="shape" transform="translate(0.5625,-9.26953)">
+			<title>Blad.5</title>
+			<path d="M6 20.25 L0 20.25 L0 21.75 L6 21.75 L6 24 L9 21 L6 18 L6 20.25 Z" class="st2"/>
+		</g>
+		<g id="shape3-7" v:mID="3" v:groupContext="shape" transform="translate(14.3437,-17.25)">
+			<title>Blad.3</title>
+			<path d="M6 20.25 L0 20.25 L0 21.75 L6 21.75 L6 24 L9 21 L6 18 L6 20.25 Z" class="st2"/>
+		</g>
+		<g id="shape4-9" v:mID="4" v:groupContext="shape" transform="translate(14.3437,-9.28125)">
+			<title>Blad.4</title>
+			<path d="M6 20.25 L0 20.25 L0 21.75 L6 21.75 L6 24 L9 21 L6 18 L6 20.25 Z" class="st2"/>
+		</g>
+		<g id="shape7-11" v:mID="7" v:groupContext="shape" transform="translate(14.3437,-1.3125)">
+			<title>Blad.7</title>
+			<path d="M6 20.25 L0 20.25 L0 21.75 L6 21.75 L6 24 L9 21 L6 18 L6 20.25 Z" class="st2"/>
+		</g>
+	</g>
+</svg>

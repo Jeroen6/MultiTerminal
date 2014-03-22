@@ -1,0 +1,14 @@
+Status:
+- = Planned.
+X = In progress, some work done.
+* = Done.
+? = Not sure if worth the effort or useful at all.
+N = Decided against.
+
+Prepend versions on list from top (oldest at bottom)
+----------
+
+Version 0
+- A working serial port tunnel for Windows
+
+

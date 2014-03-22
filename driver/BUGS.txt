@@ -1,0 +1,10 @@
+Buglist:
+- Unresolved
+x Resolved
+* Feature disable
+? Not sure if bug or feature
+[ Reason or cause ]
+
+Prepend list from top
+----------
+-   All streams open perfectly, but nothing is flowing through.
