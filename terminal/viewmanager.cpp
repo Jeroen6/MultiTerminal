@@ -194,3 +194,11 @@ void ViewManager::wipeAll()
 void ViewManager::someViewWasClosed(View *source){
     viewVisibilityChanged(source->getFilter());
 }
+
+/// return maxviews
+int ViewManager::getMaxViews() const
+{
+    return maxViews;
+}
+
+

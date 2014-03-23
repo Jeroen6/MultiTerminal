@@ -7,4 +7,4 @@ x Resolved
 
 Prepend list from top
 ----------
--   All streams open perfectly, but nothing is flowing through.
+x   All streams open perfectly, but nothing is flowing through.

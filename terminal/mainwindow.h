@@ -96,6 +96,10 @@ private slots:
 
     void on_buttonWipeAll_clicked();
 
+    void on_actionSave_triggered();
+
+    void on_actionSave_output_triggered();
+
 private:
     Ui::MainWindow *ui;
     QTimer *mainWindowUpdater;

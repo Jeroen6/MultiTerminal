@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lineAssembler = new LineAssembler();
 
     // Create viewmanager
-    views = new ViewManager(16);
+    views = new ViewManager();
     connect(views,SIGNAL(viewVisibilityChanged(QString)),this,SLOT(on_viewVisibilityChanged(QString)));
 
     // Create the filtermanager
@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     checkboxes->append(Qt::Checked);
     ui->listFilter->addItem(QString("*"));
     ui->listFilter->item(0)->setCheckState(Qt::Checked);
+    ui->labelFilterTitle->setText(QString("Filters 0 of ").append(QString().setNum(views->getMaxViews())));
 
     // Create a driverManager
     driverManager = new DriverManager(&user_settings);
@@ -167,6 +168,12 @@ void MainWindow::updateMainWindow(){
         }
         ui->buttonSend->setEnabled(false);
     }
+    // Update + button
+    if((ui->listFilter->count()-1) < views->getMaxViews()){
+        ui->buttonAddFilter->setEnabled(true);
+    }else{
+        ui->buttonAddFilter->setEnabled(false);
+    }
 }
 
 /// Filter operators
@@ -182,7 +189,10 @@ void MainWindow::on_buttonAddFilter_clicked()
 {
     bool multiple = false;
     QString text = ui->lineEditFilter->text();
-    if(text.length() > 0 && text != QString("*")){
+    // Only when text is valid, is not raw id, and not exceeding max number
+    if(text.length() > 0
+            && text != QString("*")
+            && (ui->listFilter->count()-1) < views->getMaxViews() ){
         // Check for duplicates
         int i = ui->listFilter->count();
         while(i-- > 0){
@@ -205,6 +215,11 @@ void MainWindow::on_buttonAddFilter_clicked()
             ui->listFilter->item(index)->setCheckState(Qt::Checked);
             ui->lineEditFilter->clear();
             ui->lineEditFilter->setFocus();
+            // update text
+            ui->labelFilterTitle->setText(QString("Filters ").
+                                          append(QString().setNum(ui->listFilter->count()-1).
+                                                 append(QString(" of ").
+                                                        append(QString().setNum(views->getMaxViews())))));
         }
     }
 }
@@ -231,6 +246,11 @@ void MainWindow::on_buttonRemoveFilter_clicked()
                 else
                     ui->lineEditFilter->setText(ui->listFilter->item(last)->text());
                 ui->lineEditFilter->setFocus();
+                // update text
+                ui->labelFilterTitle->setText(QString("Filters ").
+                                              append(QString().setNum(ui->listFilter->count()-1).
+                                                     append(QString(" of ").
+                                                            append(QString().setNum(views->getMaxViews())))));
             }
         }
     }
@@ -296,6 +316,7 @@ void MainWindow::on_listFilter_itemChanged(QListWidgetItem *item)
             }
         }
     }
+    ui->listFilter->sortItems();
 }
 /// @}
 
@@ -576,4 +597,146 @@ void MainWindow::on_buttonWipeAll_clicked()
     ui->textInput->clear();
     ui->textOutput->clear();
     views->wipeAll();
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Text-files (*.txt);;All Files (*)"));
+    int saveMode = -1;
+    bool openSucces = false;
+    if (fn.isEmpty()){
+        //QMessageBox msgBox;
+        //msgBox.setText("Invalid filename");
+        //msgBox.exec();
+    }else{
+        QFile file(fn);
+        if(file.exists()){
+//            QMessageBox msgBox;
+//            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
+//            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
+//            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
+//            msgBox.exec();
+//            if (msgBox.clickedButton() == appendButton) {
+//                 append
+//                saveMode = 1;
+//            }else if (msgBox.clickedButton() == overwriteButton) {
+//                // overwrite
+//                saveMode = 2;
+//            }else if (msgBox.clickedButton() == cancelButton){
+//                // abort
+//                saveMode = -1;
+//            }else{
+//                // abort
+//                saveMode = -1;
+//            }
+        }else{
+            saveMode = 0;
+        }
+        // Open file
+        switch(saveMode){
+        case 0:
+            // Create
+            openSucces = file.open(QIODevice::WriteOnly);
+            break;
+        case 1:
+            // Append
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Append);
+            break;
+        default:
+        case 2:
+            // Overwrite
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            break;
+        }
+        if (openSucces){
+            file.close();
+            QTextDocumentWriter w(fn);
+            w.write(ui->textInput->document());
+            /*
+            QString *text;
+            *text = ui->textInput->toPlainText();
+            text->replace(QRegularExpression("<[^>]*>"),"");
+            QByteArray *data = new QByteArray();
+            data->append(*text);
+            delete text;
+            file.write(*data);
+            */
+        }else{
+            // File error
+            QMessageBox msgBox;
+            msgBox.setText("Could not save file");
+            msgBox.exec();
+        }
+    }
+}
+
+void MainWindow::on_actionSave_output_triggered()
+{
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Text-files (*.txt);;All Files (*)"));
+    int saveMode = -1;
+    bool openSucces = false;
+    if (fn.isEmpty()){
+        //QMessageBox msgBox;
+        //msgBox.setText("Invalid filename");
+        //msgBox.exec();
+    }else{
+        QFile file(fn);
+        if(file.exists()){
+//            QMessageBox msgBox;
+//            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
+//            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
+//            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
+//            msgBox.exec();
+//            if (msgBox.clickedButton() == appendButton) {
+//                 append
+//                saveMode = 1;
+//            }else if (msgBox.clickedButton() == overwriteButton) {
+//                // overwrite
+//                saveMode = 2;
+//            }else if (msgBox.clickedButton() == cancelButton){
+//                // abort
+//                saveMode = -1;
+//            }else{
+//                // abort
+//                saveMode = -1;
+//            }
+        }else{
+            saveMode = 0;
+        }
+        // Open file
+        switch(saveMode){
+        case 0:
+            // Create
+            openSucces = file.open(QIODevice::WriteOnly);
+            break;
+        case 1:
+            // Append
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Append);
+            break;
+        default:
+        case 2:
+            // Overwrite
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            break;
+        }
+        if (openSucces){
+            file.close();
+            QTextDocumentWriter w(fn);
+            w.write(ui->textOutput->document());
+            /*
+            QString *text;
+            *text = ui->textInput->toPlainText();
+            text->replace(QRegularExpression("<[^>]*>"),"");
+            QByteArray *data = new QByteArray();
+            data->append(*text);
+            delete text;
+            file.write(*data);
+            */
+        }else{
+            // File error
+            QMessageBox msgBox;
+            msgBox.setText("Could not save file");
+            msgBox.exec();
+        }
+    }
 }

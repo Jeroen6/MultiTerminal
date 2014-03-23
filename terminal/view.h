@@ -17,6 +17,10 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include <QFile>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextDocumentWriter>
 
 namespace Ui {
 class View;
@@ -43,6 +47,8 @@ private slots:
     void on_actionClose_triggered();
 
     void on_checkAutoScroll_stateChanged(int arg1);
+
+    void on_actionSave_triggered();
 
 private:
     Ui::View *ui;

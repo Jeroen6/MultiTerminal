@@ -70,3 +70,74 @@ void View::on_buttonWipe_clicked()
 void View::closeEvent( QCloseEvent * event ){
     closed(this);
 }
+
+void View::on_actionSave_triggered()
+{
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Text-files (*.txt);;All Files (*)"));
+    int saveMode = -1;
+    bool openSucces = false;
+    if (fn.isEmpty()){
+        //QMessageBox msgBox;
+        //msgBox.setText("Invalid filename");
+        //msgBox.exec();
+    }else{
+        QFile file(fn);
+        if(file.exists()){
+//            QMessageBox msgBox;
+//            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
+//            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
+//            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
+//            msgBox.exec();
+//            if (msgBox.clickedButton() == appendButton) {
+//                 append
+//                saveMode = 1;
+//            }else if (msgBox.clickedButton() == overwriteButton) {
+//                // overwrite
+//                saveMode = 2;
+//            }else if (msgBox.clickedButton() == cancelButton){
+//                // abort
+//                saveMode = -1;
+//            }else{
+//                // abort
+//                saveMode = -1;
+//            }
+        }else{
+            saveMode = 0;
+        }
+        // Open file
+        switch(saveMode){
+        case 0:
+            // Create
+            openSucces = file.open(QIODevice::WriteOnly);
+            break;
+        case 1:
+            // Append
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Append);
+            break;
+        default:
+        case 2:
+            // Overwrite
+            openSucces = file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            break;
+        }
+        if (openSucces){
+            file.close();
+            QTextDocumentWriter w(fn);
+            w.write(ui->textInput->document());
+            /*
+            QString *text;
+            *text = ui->textInput->toPlainText();
+            text->replace(QRegularExpression("<[^>]*>"),"");
+            QByteArray *data = new QByteArray();
+            data->append(*text);
+            delete text;
+            file.write(*data);
+            */
+        }else{
+            // File error
+            QMessageBox msgBox;
+            msgBox.setText("Could not save file");
+            msgBox.exec();
+        }
+    }
+}

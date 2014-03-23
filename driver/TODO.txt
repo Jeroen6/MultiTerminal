@@ -9,6 +9,6 @@ Prepend versions on list from top (oldest at bottom)
 ----------
 
 Version 0
-- A working serial port tunnel for Windows
+* A working serial port tunnel for Windows
 
 

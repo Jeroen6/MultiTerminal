@@ -23,7 +23,7 @@ class ViewManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewManager(int setMaxViews = 16, QWidget *parent = 0);
+    explicit ViewManager(int setMaxViews = 32, QWidget *parent = 0);
     ~ViewManager();
 
     int spawn(QString filter);
@@ -43,6 +43,8 @@ public:
 
     int wipe(QString filter);
     void wipeAll();
+
+    int getMaxViews() const;
 
 signals:
     void viewVisibilityChanged(QString filter);
