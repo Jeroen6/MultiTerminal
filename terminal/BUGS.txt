@@ -7,6 +7,13 @@ x Resolved
 
 Prepend list from top
 ----------
+-   Server does not lock listening port while connected.
+    when disconnecting from driver the server is unable to restart
+-   Use a monospaced font
+-   On huge data speeds the filtermanager buffer is an issue
+    - program becomes unresponsive
+    - data keeps flowing thourgh window
+    - buffer is not cleared when filter is removed
 x   Scaling Wipe button in views must be nonscaling
 x   Config only local tickbox not persistent
 x   Remove scroll button from view
