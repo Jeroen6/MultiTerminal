@@ -235,6 +235,12 @@
           <height>200</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>Courier</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
@@ -371,6 +377,12 @@
           <width>16777215</width>
           <height>100</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Courier</family>
+          <pointsize>9</pointsize>
+         </font>
         </property>
        </widget>
       </item>

@@ -99,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Spawn some timers for refreshing gui
     viewUpdater = new QTimer();
     connect(viewUpdater, SIGNAL(timeout()), this, SLOT(updateViews()));
-    viewUpdater->setInterval(10);
+    viewUpdater->setInterval(1);
     viewUpdater->start();
     mainWindowUpdater = new QTimer();
     connect(mainWindowUpdater,SIGNAL(timeout()),this,SLOT(updateMainWindow()));
@@ -396,7 +396,6 @@ void MainWindow::acceptConnection()
     }else{
         // Valid
         tcpServerConnectionValid = true;
-        tcpServer->close();
 
         connect(tcpServerConnection, SIGNAL(readyRead()),
                 this, SLOT(newData()));
@@ -412,7 +411,6 @@ void MainWindow::acceptConnection()
 /// @brief Socket disconnected, restart server
 void MainWindow::lostConnection(){
     tcpServerConnectionValid = false;
-    tcpServer->listen(QHostAddress::LocalHost,user_settings.server.portnumber);
 }
 
 /// @brief Socket newdata

@@ -63,6 +63,12 @@
       </item>
       <item>
        <widget class="QTextEdit" name="textInput">
+        <property name="font">
+         <font>
+          <family>Courier</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>

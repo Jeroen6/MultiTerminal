@@ -40,6 +40,7 @@ int FilterManager::remove(QString s){
         // Destroy
         Filter *f = filters[i];
         filters.removeAt(i);
+        f->buffer.clear();
         delete f;
         return 0;
     }
