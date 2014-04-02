@@ -127,10 +127,14 @@ MainWindow::~MainWindow()
 void MainWindow::updateViews(){
     // For each filter, except *
     int i = ui->listFilter->count();
-    while(i-- > 0){
+    while(i-- > 0)
+    {
         QString filter = ui->listFilter->item(i)->text();
-        QString data = filters->readLine(filter);
-        views->write(filter, data);
+        int fi = filters->isAtIndex(filter);
+        while(filters->lineReady(fi)){
+            QString data = filters->readLine(fi);
+            views->write(filter, data);
+        }
     }
 }
 

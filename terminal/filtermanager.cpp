@@ -17,6 +17,7 @@
 
 #include <QTextStream>
 #include <QString>
+#include <QDebug>
 
 /// @brief add filter
 int FilterManager::add(QString s){
@@ -73,6 +74,7 @@ QString FilterManager::readLine(QString filter){
         if(! filters[i]->buffer.isEmpty()){
             data = filters[i]->buffer.first();
             filters[i]->buffer.removeFirst();
+            qDebug() << "remains in " << filters[i]->mask << ": " << filters[i]->buffer.count();
             return data;
         }
         return NULL;
@@ -80,6 +82,32 @@ QString FilterManager::readLine(QString filter){
         return NULL;
     }
 }
+
+/// @brief Read filter output
+QString FilterManager::readLine(int i){
+    if(i >= 0){
+        QString data;
+        if(! filters[i]->buffer.isEmpty()){
+            data = filters[i]->buffer.first();
+            filters[i]->buffer.removeFirst();
+            qDebug() << "remains in " << filters[i]->mask << ": " << filters[i]->buffer.count();
+            return data;
+        }
+        return NULL;
+    }else{
+        return NULL;
+    }
+}
+
+/// @brief Read filter output
+int FilterManager::lineReady(int i){
+    if(i >= 0){
+        return filters[i]->buffer.count();
+    }else{
+        return 0;
+    }
+}
+
 
 /// @brief Return index
 int FilterManager::isAtIndex(QString s){

@@ -49,13 +49,16 @@ public:
     int write(QString data);            /// Write to filtermanager, data is filtered automatically
     int write(QString f, QString data); /// Write to a specific filter
     QString readLine(QString f);        /// Read a line from filtered output
+    QString readLine(int i);        /// Read a line from filtered output
+    int isAtIndex(QString s);       /// Find filter index from filter string
 
+    int lineReady(int i);
 private:
     QList<QString> unprocessed;     /// Unprocessed data
     QList<Filter*> filters;         /// List of filtered data lists
 
     void filterEngine();            /// The filter algorithm
-    int isAtIndex(QString s);       /// Find filter index from filter string
+
 
 };
 
