@@ -7,6 +7,8 @@ x Resolved
 
 Prepend list from top
 ----------
+-   Fix issue where serialport stops recceiving without error and/or other reason
+-   Autoscroll must also scroll back horizontal bar to the left
 x   Server does not lock listening port while connected.
     when disconnecting from driver the server is unable to restart
 x   Use a monospaced font
