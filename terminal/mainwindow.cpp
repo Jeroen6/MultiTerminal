@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Start the TCP server
     tcpServer = new QTcpServer();
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
-    while(!tcpServer->listen(QHostAddress::LocalHost,user_settings.server.portnumber)){
+    while(!tcpServer->listen(QHostAddress::Any,user_settings.server.portnumber)){
         user_settings.server.portnumber++;
     }
     tcpServerConnectionValid = false;
@@ -447,7 +447,7 @@ void MainWindow::displayError(QAbstractSocket::SocketError socketError)
                              tr("The following error occurred: ."));
 
     tcpServerConnection->close();
-    tcpServer->listen(QHostAddress::LocalHost,6666);
+    tcpServer->listen(QHostAddress::Any,user_settings.server.portnumber);
 
 #ifndef QT_NO_CURSOR
     QApplication::restoreOverrideCursor();
@@ -558,7 +558,7 @@ void MainWindow::on_actionOpen_file_triggered()
 void MainWindow::applyUserSettings(){
     if(!tcpServerConnectionValid){
         tcpServer->close();
-        tcpServer->listen(QHostAddress::LocalHost,user_settings.server.portnumber);
+        tcpServer->listen(QHostAddress::Any,user_settings.server.portnumber);
     }
     /// @todo Restart server with correct settings
     /// @todo Load other settings variables
