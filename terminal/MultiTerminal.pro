@@ -41,7 +41,10 @@ QT += network
 
 OTHER_FILES += \
     BUGS.txt \
-    TODO.txt
+    TODO.txt \
+    icon.rc
 
 RESOURCES += \
     resources.qrc
+
+RC_FILE = icon.rc
