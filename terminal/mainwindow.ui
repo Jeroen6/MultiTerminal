@@ -410,12 +410,6 @@
     <addaction name="separator"/>
     <addaction name="actionConfiguration"/>
    </widget>
-   <widget class="QMenu" name="menuSetTestMode">
-    <property name="title">
-     <string>setTestMode</string>
-    </property>
-    <addaction name="actionRun"/>
-   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="sizePolicy">
      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -440,7 +434,6 @@
    </widget>
    <addaction name="menuConnect"/>
    <addaction name="menuFile"/>
-   <addaction name="menuSetTestMode"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">

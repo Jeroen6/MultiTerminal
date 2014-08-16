@@ -21,9 +21,15 @@ About::About(QWidget *parent) :
     ui(new Ui::About)
 {
     ui->setupUi(this);
+    // Insert poor mans version number
+    QString content = ui->textBrowser->toHtml();
+    content.replace("__DATE__",__DATE__);
+    content.replace("__TIME__",__TIME__);
+    ui->textBrowser->clear();
+    ui->textBrowser->insertHtml(content);
+    // Hide this window
     this->hide();
 }
-
 
 About::~About()
 {
