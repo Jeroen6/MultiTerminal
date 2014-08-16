@@ -425,16 +425,17 @@ void MainWindow::newData(){
         if(ui->listFilter->item(0)->checkState() == Qt::Checked){
             line.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
             line.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
+            // Autoscroll
             QCursor c = ui->textInput->cursor();
             ui->textInput->append(line);
-            if(ui->boxAutoScrollInput->checkState()==Qt::Checked)
+            if(ui->boxAutoScrollInput->checkState()==Qt::Checked){
                 ui->textInput->moveCursor(QTextCursor::End);
-            else
+                ui->textInput->horizontalScrollBar()->setValue(ui->textInput->horizontalScrollBar()->minimum());
+            }else{
                 ui->textInput->setCursor(c);
+            }
         }
     }
-
-
 }
 
 /// @brief Socket error tied to socket

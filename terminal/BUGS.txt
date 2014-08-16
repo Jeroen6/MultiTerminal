@@ -1,16 +1,17 @@
 Buglist:
 - Unresolved
 x Resolved
-* Feature disable
+* Feature disabled
 ? Not sure if bug or feature
 [ Reason or cause ]
 
 Prepend list from top
 ----------
-*   Allow remote IP's to connect.
+x   Allow remote IP's to connect.
     [listen(QHostAddress::LocalHost... should be QHostAddress::Any]
--   Fix issue where serialport stops recceiving without error and/or other reason
--   Autoscroll must also scroll back horizontal bar to the left
+?   Fix issue where serialport stops recceiving without error and/or other reason
+    Could not reproduce
+x   Autoscroll must also scroll back horizontal bar to the left
 x   Server does not lock listening port while connected.
     when disconnecting from driver the server is unable to restart
 x   Use a monospaced font
