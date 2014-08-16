@@ -169,12 +169,17 @@ int main(int argc, char *argv[])
     QCommandLineOption portFlowctrlOption(QStringList() << "f" << "flowctrl",
                                     QCoreApplication::translate("main", "flowctrl N, H, S, None, CTS/RTS or Xon/Xoff\neg: -f N"),
                                     QCoreApplication::translate("main", "flowctrl"));
+    QCommandLineOption portReadBuffer(QStringList() << "r" << "read buffer",
+                                    QCoreApplication::translate("main", "read buffer for serial port (positive integer)"),
+                                    QCoreApplication::translate("main", "buffer"));
+
 
     baudrateOption.setDefaultValue(QString("9600"));
     portParityOption.setDefaultValue(QString("N"));
     portStopBitsOption.setDefaultValue(QString("1"));
     portFlowctrlOption.setDefaultValue(QString("N"));
     portDatabitsOption.setDefaultValue(QString("8"));
+    portReadBuffer.setDefaultValue(QString("32"));
 
     parser.setApplicationDescription("Serialport to TCP Thread driver");
     parser.addHelpOption();
@@ -189,6 +194,7 @@ int main(int argc, char *argv[])
     parser.addOption(portDatabitsOption);
     parser.addOption(portStopBitsOption);
     parser.addOption(portFlowctrlOption);
+    parser.addOption(portReadBuffer);
 
     // Process the actual command line arguments given by the user
     parser.process(app);
@@ -219,6 +225,7 @@ int main(int argc, char *argv[])
         port.setDatabits(parser.value(portDatabitsOption));
         port.setFlowctrl(parser.value(portFlowctrlOption));
         port.setHost( args.at(0), args.at(1) );
+        port.setReadBuffer(parser.value(portReadBuffer));
 
         if(port.getArgumentError()){
             return ArgumentError;

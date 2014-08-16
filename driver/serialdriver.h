@@ -43,17 +43,16 @@ public:
     bool getArgumentError() const;
     void setHost(QString s, QString port);
     int start();
+    void setReadBuffer(QString s);
 
 public slots:
     void newSerialData();
     void socketData();
-    void bufferAged();
     void socketControl(QAbstractSocket::SocketState);
     void serialControl(QSerialPort::SerialPortError);
 
 private:
     QByteArray serialRXbuffer;
-    QTimer serialRXAge;
     bool argumentError;
     QString port;                       /// Portname
     quint32 baudrate;                   /// Baudrate
@@ -65,6 +64,7 @@ private:
 	QSerialPort serial;
     QString server;
     quint16 serverport;
+    quint32 serialReadBuffer;
     QSerialPortInfo portInfo;
     bool findPortInfoStruct();
 

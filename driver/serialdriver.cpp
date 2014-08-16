@@ -30,31 +30,12 @@ SerialDriver::SerialDriver()
 
     connect(&serial,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(serialControl(QSerialPort::SerialPortError)));
     connect(&socket,SIGNAL(stateChanged(QAbstractSocket::SocketState)),this,SLOT(socketControl(QAbstractSocket::SocketState)));
-
-    serialRXAge.setInterval(100);
-    connect(&serialRXAge, SIGNAL(timeout()),this,SLOT(bufferAged()));
-}
-
-void SerialDriver::bufferAged(){
-    socket.write(serialRXbuffer);
-    serialRXbuffer.clear();
-    serialRXAge.stop();
 }
 
 void SerialDriver::newSerialData(){
-    QTextStream cout(stdout);
     serialRXbuffer += serial.readAll();
-    // wait for at least 8 bytes
-    if(serialRXbuffer.count() > 8)
-    {
-        socket.write(serialRXbuffer);
-        serialRXbuffer.clear();
-    }
-    else
-    {
-        // but make sure nothing is left behind
-        serialRXAge.start();
-    }
+    socket.write(serialRXbuffer);
+    serialRXbuffer.clear();
 }
 
 void SerialDriver::serialControl(QSerialPort::SerialPortError serror){
@@ -106,12 +87,9 @@ void SerialDriver::serialControl(QSerialPort::SerialPortError serror){
     }
 }
 
-
 void SerialDriver::socketData(){
-    QTextStream cout(stdout);
     QByteArray data = socket.readAll();
     serial.write(data);
-    cout << data << endl;
 }
 
 void SerialDriver::socketControl(QAbstractSocket::SocketState state){
@@ -137,7 +115,6 @@ void SerialDriver::socketControl(QAbstractSocket::SocketState state){
     default:
         break;
     }
-
 }
 
 int SerialDriver::start(void){
@@ -158,6 +135,7 @@ int SerialDriver::start(void){
     serial.setPort(portInfo);
     if(serial.open(QIODevice::ReadWrite)){
         cout << "Serial opened" << endl;
+        serial.setReadBufferSize(serialReadBuffer);
         if(!serial.setBaudRate(baudrate))
             cout << "Could not configure baudrate " << endl;
         if(!serial.setDataBits(databits))
@@ -195,6 +173,17 @@ int SerialDriver::start(void){
         error = FileError;
     }
     return error;
+}
+
+void SerialDriver::setReadBuffer(QString s)
+{
+    bool succes = false;
+    serialReadBuffer = s.toInt(&succes);
+    if(!succes)
+    {
+        serialReadBuffer = 16;
+        argumentError = true;
+    }
 }
 
 void SerialDriver::setPort(QString s)
