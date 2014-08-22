@@ -23,6 +23,7 @@
 #include <QtWidgets>
 #include <QMessageBox>
 #include <QProcess>
+#include <QChar>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "view.h"
@@ -43,8 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // Create secondary windows
     about = new About();
     config = new Config();
-    // Connect close event, this inclused save
+    ascii = new Ascii();
+    // Connect close events
     connect(config,SIGNAL(closed(Config::ConfigExitCode)),this,SLOT(config_closed(Config::ConfigExitCode)));
+    connect(ascii,SIGNAL(callback(bool send, QChar c)),this,SLOT(ascii_callback(bool send, QChar c)));
 
     // Initialise the line assembler
     lineAssembler = new LineAssembler();
@@ -148,6 +151,7 @@ void MainWindow::updateMainWindow(){
         case QAbstractSocket::ConnectedState  :
             tcpServerStatus.setText("<img src=':/icons/resources/icons/accept.png' /> Server: Connected with " + tcpServerConnection->peerAddress().toString());
             ui->buttonSend->setEnabled(true);
+            ui->buttonAscii->setEnabled(true);
             actions.at(0)->setEnabled(false);
             break;
         case QAbstractSocket::BoundState      :
@@ -167,6 +171,7 @@ void MainWindow::updateMainWindow(){
             tcpServerStatus.setText("<img src=':/icons/resources/icons/cross.png' / Server:> Stopped");
         }
         ui->buttonSend->setEnabled(false);
+        ui->buttonAscii->setEnabled(false);
     }
     // Update + button
     if((ui->listFilter->count()-1) < views->getMaxViews()){
@@ -740,6 +745,34 @@ void MainWindow::on_actionSave_output_triggered()
             QMessageBox msgBox;
             msgBox.setText("Could not save file");
             msgBox.exec();
+        }
+    }
+}
+
+/// @brief Popup window for special ascii keys
+void MainWindow::on_buttonAscii_clicked()
+{
+    ascii->setGeometry(this->geometry());
+    ascii->show();
+}
+
+/// @brief Ascii window closed, send char if possible
+void MainWindow::ascii_callback(bool send, QChar c){
+    if(send){
+        if(tcpServerConnectionValid){
+            if(tcpServerConnection->ConnectedState == QAbstractSocket::ConnectedState){
+                QString text; text.number(c.toLatin1());
+                text.prepend("\\x");
+                QByteArray t; t.append(c);
+                tcpServerConnection->write(t);
+                QCursor c = ui->textOutput->cursor();
+                ui->textOutput->moveCursor(QTextCursor::End);
+                ui->textOutput->insertPlainText(text);
+                if(ui->boxAutoScrollOutput->checkState()==Qt::Checked)
+                    ui->textOutput->moveCursor(QTextCursor::End);
+                else
+                    ui->textOutput->setCursor(c);
+            }
         }
     }
 }

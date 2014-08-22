@@ -29,6 +29,7 @@
 #include "about.h"
 #include "config.h"
 #include "drivermanager.h"
+#include "ascii.h"
 
 namespace Ui {
 class MainWindow;
@@ -100,6 +101,10 @@ private slots:
 
     void on_actionSave_output_triggered();
 
+    void on_buttonAscii_clicked();
+
+    void ascii_callback(bool send, QChar c);
+
     void on_lineEditSend_returnPressed();
 
 private:
@@ -107,6 +112,7 @@ private:
     QTimer *mainWindowUpdater;
     About *about;
     Config *config;
+    Ascii *ascii;
     QLabel statusbartext;
 
     /* Driver */
