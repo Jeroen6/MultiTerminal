@@ -124,6 +124,7 @@ void Config::LoadSettings(Config::TerminalSettings_t s)
 /// General event on close window
 void Config::closeEvent( QCloseEvent * event )
 {
+    (void)event;
     this->hide();
     clearSerialPortList();
     closed(DISCARD);
@@ -342,4 +343,11 @@ void Config::on_buttonDefaults_clicked()
     settings.server.localOnly  = false;
     settings.serial.reconnect  = Config::No;
     LoadSettings(settings);
+}
+
+/// Refresh complete view
+void Config::on_buttonRefresh_clicked()
+{
+    clearSerialPortList();
+    this->update();
 }

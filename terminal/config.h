@@ -76,6 +76,8 @@ private slots:
 
     void on_buttonDefaults_clicked();
 
+    void on_buttonRefresh_clicked();
+
 private:
     Ui::Config *ui;
 

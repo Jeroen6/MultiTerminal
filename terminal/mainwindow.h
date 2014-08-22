@@ -100,6 +100,8 @@ private slots:
 
     void on_actionSave_output_triggered();
 
+    void on_lineEditSend_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     QTimer *mainWindowUpdater;

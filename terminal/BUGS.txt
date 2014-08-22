@@ -7,10 +7,11 @@ x Resolved
 
 Prepend list from top
 ----------
+x   Empty error message when the driver is unable to start
 x   Allow remote IP's to connect.
     [listen(QHostAddress::LocalHost... should be QHostAddress::Any]
 ?   Fix issue where serialport stops recceiving without error and/or other reason
-    Could not reproduce
+    [Could not reproduce]
 x   Autoscroll must also scroll back horizontal bar to the left
 x   Server does not lock listening port while connected.
     when disconnecting from driver the server is unable to restart

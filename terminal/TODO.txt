@@ -15,23 +15,25 @@ Version 2:
     - Create new file session on request of debug target
     - Clear screens on request of debug target
 - Live Graphing
+- Colors (per filter) in raw view
 
 Version 1
 - Have some feedback and detection mechanism for faulty baudrate setting
 - Show bytes/s and number of visible bytes in each view
 * Ability to save a file in raw and each view
-- Improve settings window
+? Improve settings window
 ? QSettings or XML file for settings, or maybe even .term config files
 ? Always save contents to file session
 ? Retroactive filtering when creating a brand new filter based on the current textInput text.
 - Auto reconnect implementation
-- Filter colors in raw view
 * Sort list of filters alfabetically
 - Up and Down arrows navigate filterList in mainWindow listFilter entry box
 - History in send textbox
-- Enter key send data when focus in send textbox
-- Display ascii control characters in a fancy way
-- Support for ascii control characters in escape sequences for sending
+X Enter key send data when focus in send textbox
+? Display (or highlight) ascii control characters in a fancy way
+    [ Severe performance degredation with iterative method and string insertions ]
+X Support for ascii control characters in escape sequences for sending
+* Show connected source (tty/COM or filename) in driver statusbar area
 
 Version 0
 * Checkbox disables when closing view

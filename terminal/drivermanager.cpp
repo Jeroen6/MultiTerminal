@@ -16,13 +16,13 @@
 #include <Qt>
 #include <QObject>
 #include <QProcess>
+#include <QMessageBox>
 #include "drivermanager.h"
 
 DriverManager::DriverManager(Config::TerminalSettings_t *s)
 {
     user_settings = s;
     applyUserSettings();
-
 
     // Create tty->tcp
     driver = new QProcess();
@@ -32,7 +32,6 @@ DriverManager::DriverManager(Config::TerminalSettings_t *s)
 
     driverExpectStop = false;
     state = STOPPED;
-
 
 #ifdef Q_OS_WIN
 #if USE_COM2TCP
@@ -48,6 +47,13 @@ DriverManager::DriverManager(Config::TerminalSettings_t *s)
 #else
     /** @todo handle this */
 #endif
+    if(  driver->execute(driver_path) < 0 ){
+        QMessageBox msgBox;
+        msgBox.setText("The driver seems unavailable.\n(missing or renamed?)");
+        msgBox.setInformativeText("The server should still work.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
 }
 
 DriverManager::~DriverManager()
@@ -219,6 +225,7 @@ void DriverManager::process_stateChanged(QProcess::ProcessState dstate)
             switch(driver->exitCode()){
             case 0:
                 // no error, just stopped?
+                lastError = "Unknown error.\n(is the driver available?)";
                 break;
             case 1:
                 lastError = "ArgumentError, wrong settings.";

@@ -347,7 +347,10 @@ void MainWindow::driver_stateChanged(DriverManager::DriverState state){
         break;
     case DriverManager::RUNNING:
     {
-        statusbartext.setText("<img src=':/icons/resources/icons/accept.png' /> Driver: Running");
+        QString text = "<img src=':/icons/resources/icons/accept.png' /> Driver: Running (";
+        text.append( user_settings.serial.tty );
+        text.append( ")");
+        statusbartext.setText(text);
         QList<QAction*>actions = ui->menuConnect->actions();
         // Disbable connect and Streamfile
         actions.at(0)->setEnabled(false);
@@ -487,6 +490,7 @@ void MainWindow::on_buttonSend_clicked()
 
 /// @brief Exit app
 void MainWindow::closeEvent(QCloseEvent *event) {
+    (void)event;
     qApp->exit();
 }
 
@@ -738,4 +742,11 @@ void MainWindow::on_actionSave_output_triggered()
             msgBox.exec();
         }
     }
+}
+
+/// @brief Enter pressed in send field
+void MainWindow::on_lineEditSend_returnPressed()
+{
+    if(ui->buttonSend->isEnabled())
+        on_buttonSend_clicked();
 }

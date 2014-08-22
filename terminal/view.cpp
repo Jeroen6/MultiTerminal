@@ -57,6 +57,7 @@ void View::write(QString data){
 
 void View::on_checkAutoScroll_stateChanged(int arg1)
 {
+    (void)arg1;
     if(ui->checkAutoScroll->checkState()==Qt::Unchecked)
         ui->textInput->moveCursor(QTextCursor::WordLeft);
 
@@ -68,6 +69,7 @@ void View::on_buttonWipe_clicked()
 }
 
 void View::closeEvent( QCloseEvent * event ){
+    (void)event;
     closed(this);
 }
 
