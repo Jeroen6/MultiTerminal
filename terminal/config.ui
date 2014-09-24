@@ -170,25 +170,60 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLineEdit" name="editBaudrate">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Future version</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="QCheckBox" name="checkCustomBaud">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="editBaudrate">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Future version</string>
+                    </property>
+                    <property name="inputMask">
+                     <string>000000000000000D</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item row="2" column="1">
                  <widget class="QLabel" name="label_6">
                   <property name="text">
                    <string>Custom baudrate</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Databits</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>Stopbits</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Parity</string>
                   </property>
                  </widget>
                 </item>
@@ -225,13 +260,6 @@
                   </item>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Databits</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="4" column="0">
                  <widget class="QComboBox" name="boxStopbits">
                   <property name="enabled">
@@ -261,13 +289,6 @@
                     <string>2</string>
                    </property>
                   </item>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLabel" name="label_4">
-                  <property name="text">
-                   <string>Stopbits</string>
-                  </property>
                  </widget>
                 </item>
                 <item row="5" column="0">
@@ -311,10 +332,10 @@
                   </item>
                  </widget>
                 </item>
-                <item row="5" column="1">
-                 <widget class="QLabel" name="label_5">
+                <item row="6" column="1">
+                 <widget class="QLabel" name="label_11">
                   <property name="text">
-                   <string>Parity</string>
+                   <string>Flow control</string>
                   </property>
                  </widget>
                 </item>
@@ -346,10 +367,10 @@
                   </item>
                  </widget>
                 </item>
-                <item row="6" column="1">
-                 <widget class="QLabel" name="label_11">
+                <item row="7" column="1">
+                 <widget class="QLabel" name="label_10">
                   <property name="text">
-                   <string>Flow control</string>
+                   <string>Auto reconnect</string>
                   </property>
                  </widget>
                 </item>
@@ -382,13 +403,6 @@
                     <string>After 10 seconds</string>
                    </property>
                   </item>
-                 </widget>
-                </item>
-                <item row="7" column="1">
-                 <widget class="QLabel" name="label_10">
-                  <property name="text">
-                   <string>Auto reconnect</string>
-                  </property>
                  </widget>
                 </item>
                 <item row="8" column="0">

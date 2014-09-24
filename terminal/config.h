@@ -78,6 +78,8 @@ private slots:
 
     void on_buttonRefresh_clicked();
 
+		void on_checkCustomBaud_clicked(bool checked);
+
 private:
     Ui::Config *ui;
 
