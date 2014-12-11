@@ -22,6 +22,7 @@
 #include <QListWidget>
 #include <QThread>
 #include <QFile>
+#include <inttypes.h>
 #include "lineassembler_class.h"
 #include "filtermanager.h"
 #include "view.h"
@@ -29,7 +30,6 @@
 #include "about.h"
 #include "config.h"
 #include "drivermanager.h"
-#include "ascii.h"
 
 namespace Ui {
 class MainWindow;
@@ -103,16 +103,17 @@ private slots:
 
     void on_buttonAscii_clicked();
 
-    void ascii_callback(bool send, QChar c);
-
     void on_lineEditSend_returnPressed();
+
+    void on_AnyAsciiClicked();
+
+    void keyPressEvent(QKeyEvent* event);
 
 private:
     Ui::MainWindow *ui;
     QTimer *mainWindowUpdater;
     About *about;
     Config *config;
-    Ascii *ascii;
     QLabel statusbartext;
 
     /* Driver */
@@ -140,6 +141,16 @@ private:
     Config::TerminalSettings_t user_settings;
     void applyUserSettings();
     void defaultUserSettings();
+
+    /* Totals */
+    QLabel totalTexts;
+    uint64_t totalBytesReceived;
+    uint64_t totalBytesTransmitted;
+
+    /* Send history */
+    int sendHistoryMax;
+    int currentHistoryView;
+    QStringList sendHistory;
 };
 
 

@@ -21,8 +21,7 @@ SOURCES += main.cpp\
     viewmanager.cpp \
     about.cpp \
     config.cpp \
-    drivermanager.cpp \
-    ascii.cpp
+    drivermanager.cpp
 
 HEADERS  += mainwindow.h \
     filtermanager.h \
@@ -32,13 +31,13 @@ HEADERS  += mainwindow.h \
     about.h \
     config.h \
     drivermanager.h \
+    ascii.h \
     ascii.h
 
 FORMS    += mainwindow.ui \
     view.ui \
     about.ui \
-    config.ui \
-    ascii.ui
+    config.ui
 
 QT += network
 

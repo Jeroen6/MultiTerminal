@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
-    <height>475</height>
+    <width>629</width>
+    <height>469</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -347,6 +347,9 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -401,6 +404,30 @@
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QGroupBox" name="groupBoxAscii">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="title">
+       <string>Ascii extension</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayoutAsciiL"/>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayoutAsciiR"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -408,7 +435,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>537</width>
+     <width>629</width>
      <height>21</height>
     </rect>
    </property>

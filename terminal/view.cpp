@@ -15,7 +15,15 @@
  */
 #include "view.h"
 #include "ui_view.h"
+#include <QRegularExpression>
+#include <QTimer>
 
+/**
+ * @brief View::View
+ * @param argViewID
+ * @param argFilter
+ * @param parent
+ */
 View::View(int argViewID, QString argFilter, QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::View)
@@ -24,20 +32,39 @@ View::View(int argViewID, QString argFilter, QWidget *parent):
     filter = argFilter;
 
     ui->setupUi(this);
+
+    // statusbar
+    ui->statusbar->addWidget(&statusBarTextsView, 1);
+
+    // totals
+    totalBytesInView = 0;
 }
 
+/**
+ * @brief View::~View
+ */
 View::~View()
 {
     delete ui;
 }
 
+/**
+ * @brief View::on_actionClose_triggered
+ */
 void View::on_actionClose_triggered()
 {
     this->close();
 }
 
+/**
+ * @brief View::write
+ * @param data
+ */
 void View::write(QString data){
     if(data != ""){
+        totalBytesInView += data.count();
+        if(ui->checkPrefixHide->isChecked())
+            data.remove(QRegularExpression(QString("^")+filter));
         data.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
         data.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
         QCursor c = ui->textInput->cursor();
@@ -53,8 +80,17 @@ void View::write(QString data){
     ui->textInput->insertPlainText(data);
     ui->textInput->moveCursor(QTextCursor::End);
     */
+
+    statusBarTextsView.clear();
+    statusBarTextsView.setText(QString("<img src=':/icons/resources/icons/stats.png' /> rx: ")+
+                       QString().setNum(totalBytesInView)
+                       );
 }
 
+/**
+ * @brief View::on_checkAutoScroll_stateChanged
+ * @param arg1
+ */
 void View::on_checkAutoScroll_stateChanged(int arg1)
 {
     (void)arg1;
@@ -63,16 +99,26 @@ void View::on_checkAutoScroll_stateChanged(int arg1)
 
 }
 
+/**
+ * @brief View::on_buttonWipe_clicked
+ */
 void View::on_buttonWipe_clicked()
 {
     ui->textInput->clear();
 }
 
+/**
+ * @brief View::closeEvent
+ * @param event
+ */
 void View::closeEvent( QCloseEvent * event ){
     (void)event;
     closed(this);
 }
 
+/**
+ * @brief View::on_actionSave_triggered
+ */
 void View::on_actionSave_triggered()
 {
     QString fn = QFileDialog::getSaveFileName(this, tr("Save as..."), QString(), tr("Text-files (*.txt);;All Files (*)"));
@@ -142,4 +188,14 @@ void View::on_actionSave_triggered()
             msgBox.exec();
         }
     }
+}
+
+/**
+ * @brief View::on_checkPrefixHide_clicked
+ * @param checked
+ */
+void View::on_checkPrefixHide_clicked(bool checked)
+{
+    (void)checked;
+/// @todo post process the visible data
 }

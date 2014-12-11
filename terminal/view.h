@@ -21,6 +21,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextDocumentWriter>
+#include <inttypes.h>
+#include <QLabel>
 
 namespace Ui {
 class View;
@@ -50,10 +52,15 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_checkPrefixHide_clicked(bool checked);
+
 private:
     Ui::View *ui;
     int ViewID;
     QString filter;
+
+    QLabel statusBarTextsView;
+    uint64_t totalBytesInView;
 
     void closeEvent( QCloseEvent * event );
 };

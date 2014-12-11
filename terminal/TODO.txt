@@ -16,18 +16,20 @@ Version 2:
     - Clear screens on request of debug target
 - Live Graphing
 - Colors (per filter) in raw view
+- Have some feedback and detection mechanism for faulty baudrate setting
+- Auto reconnect implementation
+- Show ascii control character in differnt color with their shortcut
 
 Version 1
+* Ability to send ascii control characters
 * Implemented custom baudrate
-- Remove filterstring from SerialView output
-- Have some feedback and detection mechanism for faulty baudrate setting
-- Show bytes/s and number of visible bytes in each view
+* Remove filterstring from SerialView output
+* Show bytes/s and number of visible bytes in each view
 * Ability to save a file in raw and each view
 ? Improve settings window
 ? QSettings or XML file for settings, or maybe even .term config files
 ? Always save contents to file session
 ? Retroactive filtering when creating a brand new filter based on the current textInput text.
-- Auto reconnect implementation
 * Sort list of filters alfabetically
 - Up and Down arrows navigate filterList in mainWindow listFilter entry box
 - History in send textbox

@@ -14,6 +14,7 @@
         <file>resources/icons/accept.png</file>
         <file>resources/icons/arrow_undo.png</file>
         <file>resources/icons/arrow_refresh.png</file>
+        <file>resources/icons/stats.png</file>
     </qresource>
     <qresource prefix="/files"/>
 </RCC>

@@ -24,12 +24,16 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QChar>
+#include <QPushButton>
+#include <QDebug>
+#include <QListWidget>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "view.h"
 #include "viewmanager.h"
 #include "about.h"
 #include "drivermanager.h"
+#include "ascii.h"
 
 /// @brief mainwindow constructor
 MainWindow::MainWindow(QWidget *parent) :
@@ -37,6 +41,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // Title
+#ifdef QT_DEBUG
+    this->setWindowTitle("MultiTerminal (beta)");
+#else
+    this->setWindowTitle("MultiTerminal");
+#endif
+    // Variable reset
+    totalBytesReceived = 0;
+    totalBytesTransmitted = 0;
+    sendHistoryMax = 16;
+    currentHistoryView = 0;
+
+    // Create ASCII extension
+    for(int i=0; i<16; i++){
+        QPushButton *pb = new QPushButton(QString(asciiButtonTexts[i]));
+        ui->verticalLayoutAsciiL->addWidget(pb);
+        connect(pb, SIGNAL(clicked()), this, SLOT(on_AnyAsciiClicked()));
+    }
+    for(int i=16; i<32; i++){
+        QPushButton *pb = new QPushButton(QString(asciiButtonTexts[i]));
+        ui->verticalLayoutAsciiR->addWidget(pb);
+        connect(pb, SIGNAL(clicked()), this, SLOT(on_AnyAsciiClicked()));
+    }
+    ui->buttonAscii->setCheckable(true);
+    ui->groupBoxAscii->setVisible(false);
+
     // Load settings
     /// @todo, replace for ini file or qsettings.
     defaultUserSettings();
@@ -44,10 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Create secondary windows
     about = new About();
     config = new Config();
-    ascii = new Ascii();
     // Connect close events
     connect(config,SIGNAL(closed(Config::ConfigExitCode)),this,SLOT(config_closed(Config::ConfigExitCode)));
-    connect(ascii,SIGNAL(callback(bool send, QChar c)),this,SLOT(ascii_callback(bool send, QChar c)));
 
     // Initialise the line assembler
     lineAssembler = new LineAssembler();
@@ -96,8 +124,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Initialize the statusbar
     statusbartext.setText("<img src=':/icons/resources/icons/cross.png' /> Driver: Stopped");
-    ui->statusBar->addWidget(&statusbartext,1);
-    ui->statusBar->addWidget(&tcpServerStatus,1);
+    ui->statusBar->addWidget(&statusbartext, 1);
+    ui->statusBar->addWidget(&totalTexts, 1);
+    ui->statusBar->addWidget(&tcpServerStatus, 1);
 
     // Spawn some timers for refreshing gui
     viewUpdater = new QTimer();
@@ -108,6 +137,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mainWindowUpdater,SIGNAL(timeout()),this,SLOT(updateMainWindow()));
     mainWindowUpdater->setInterval(100);
     mainWindowUpdater->start();
+
+    // Connect key hooks
 }
 
 /// @brief mainwindow destructor
@@ -151,7 +182,7 @@ void MainWindow::updateMainWindow(){
         case QAbstractSocket::ConnectedState  :
             tcpServerStatus.setText("<img src=':/icons/resources/icons/accept.png' /> Server: Connected with " + tcpServerConnection->peerAddress().toString());
             ui->buttonSend->setEnabled(true);
-            ui->buttonAscii->setEnabled(true);
+            ui->groupBoxAscii->setEnabled(true);
             actions.at(0)->setEnabled(false);
             break;
         case QAbstractSocket::BoundState      :
@@ -171,14 +202,25 @@ void MainWindow::updateMainWindow(){
             tcpServerStatus.setText("<img src=':/icons/resources/icons/cross.png' / Server:> Stopped");
         }
         ui->buttonSend->setEnabled(false);
-        ui->buttonAscii->setEnabled(false);
+        ui->groupBoxAscii->setEnabled(false);
     }
+
     // Update + button
     if((ui->listFilter->count()-1) < views->getMaxViews()){
         ui->buttonAddFilter->setEnabled(true);
     }else{
         ui->buttonAddFilter->setEnabled(false);
     }
+
+    // Update totals
+    totalTexts.clear();
+    totalTexts.setText(QString("<img src=':/icons/resources/icons/stats.png' /> rx/tx: ")+
+                       QString().setNum(totalBytesReceived)+
+                       QString(" / ")+
+                       QString().setNum(totalBytesTransmitted)
+                       );
+
+
 }
 
 /// Filter operators
@@ -328,6 +370,8 @@ void MainWindow::on_listFilter_itemChanged(QListWidgetItem *item)
 /// @brief Connect button in menu
 void MainWindow::on_actionConnect_triggered()
 {
+    totalBytesReceived = 0;
+    totalBytesTransmitted = 0;
     driverManager->connectSerial();
 }
 
@@ -426,6 +470,8 @@ void MainWindow::newData(){
     /// @todo replace for timer
     QByteArray data = tcpServerConnection->readAll();
     lineAssembler->push_chunk(data);
+    totalBytesReceived += data.count();
+
 
     while(lineAssembler->lines_ready()){
         QString line = lineAssembler->pull_line();
@@ -470,6 +516,11 @@ void MainWindow::on_buttonSend_clicked()
     if(tcpServerConnectionValid){
         if(tcpServerConnection->ConnectedState == QAbstractSocket::ConnectedState){
             QString text = ui->lineEditSend->text();
+            sendHistory.append(text);
+            if(sendHistory.count() > sendHistoryMax){
+                sendHistory.removeLast();
+            }
+            currentHistoryView = sendHistory.count();
 
             text.replace(QString("\\a"),QString("\a"));
             text.replace(QString("\\b"),QString("\b"));
@@ -482,6 +533,7 @@ void MainWindow::on_buttonSend_clicked()
 
             QByteArray t(text.toStdString().c_str());
             tcpServerConnection->write(t);
+            totalBytesTransmitted += t.count();
             QCursor c = ui->textOutput->cursor();
             ui->textOutput->moveCursor(QTextCursor::End);
             ui->textOutput->insertPlainText(text);
@@ -591,12 +643,14 @@ void MainWindow::defaultUserSettings(){
 void MainWindow::on_buttonWipeInput_clicked()
 {
     ui->textInput->clear();
+    totalBytesReceived = 0;
 }
 
 /// @brief wipe button Ouput textbox
 void MainWindow::on_buttonWipeOutput_clicked()
 {
     ui->textOutput->clear();
+    totalBytesTransmitted = 0;
 }
 
 /// @brief Wipe all views
@@ -604,6 +658,8 @@ void MainWindow::on_buttonWipeAll_clicked()
 {
     ui->textInput->clear();
     ui->textOutput->clear();
+    totalBytesReceived = 0;
+    totalBytesTransmitted = 0;
     views->wipeAll();
 }
 
@@ -619,24 +675,24 @@ void MainWindow::on_actionSave_triggered()
     }else{
         QFile file(fn);
         if(file.exists()){
-//            QMessageBox msgBox;
-//            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
-//            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
-//            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
-//            msgBox.exec();
-//            if (msgBox.clickedButton() == appendButton) {
-//                 append
-//                saveMode = 1;
-//            }else if (msgBox.clickedButton() == overwriteButton) {
-//                // overwrite
-//                saveMode = 2;
-//            }else if (msgBox.clickedButton() == cancelButton){
-//                // abort
-//                saveMode = -1;
-//            }else{
-//                // abort
-//                saveMode = -1;
-//            }
+            //            QMessageBox msgBox;
+            //            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
+            //            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
+            //            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
+            //            msgBox.exec();
+            //            if (msgBox.clickedButton() == appendButton) {
+            //                 append
+            //                saveMode = 1;
+            //            }else if (msgBox.clickedButton() == overwriteButton) {
+            //                // overwrite
+            //                saveMode = 2;
+            //            }else if (msgBox.clickedButton() == cancelButton){
+            //                // abort
+            //                saveMode = -1;
+            //            }else{
+            //                // abort
+            //                saveMode = -1;
+            //            }
         }else{
             saveMode = 0;
         }
@@ -690,24 +746,24 @@ void MainWindow::on_actionSave_output_triggered()
     }else{
         QFile file(fn);
         if(file.exists()){
-//            QMessageBox msgBox;
-//            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
-//            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
-//            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
-//            msgBox.exec();
-//            if (msgBox.clickedButton() == appendButton) {
-//                 append
-//                saveMode = 1;
-//            }else if (msgBox.clickedButton() == overwriteButton) {
-//                // overwrite
-//                saveMode = 2;
-//            }else if (msgBox.clickedButton() == cancelButton){
-//                // abort
-//                saveMode = -1;
-//            }else{
-//                // abort
-//                saveMode = -1;
-//            }
+            //            QMessageBox msgBox;
+            //            QPushButton *appendButton = msgBox.addButton(tr("Append"), QMessageBox::ActionRole);
+            //            QPushButton *overwriteButton = msgBox.addButton(tr("Overwrite"), QMessageBox::ActionRole);
+            //            QPushButton *cancelButton = msgBox.addButton(QMessageBox::Cancel);
+            //            msgBox.exec();
+            //            if (msgBox.clickedButton() == appendButton) {
+            //                 append
+            //                saveMode = 1;
+            //            }else if (msgBox.clickedButton() == overwriteButton) {
+            //                // overwrite
+            //                saveMode = 2;
+            //            }else if (msgBox.clickedButton() == cancelButton){
+            //                // abort
+            //                saveMode = -1;
+            //            }else{
+            //                // abort
+            //                saveMode = -1;
+            //            }
         }else{
             saveMode = 0;
         }
@@ -752,26 +808,65 @@ void MainWindow::on_actionSave_output_triggered()
 /// @brief Popup window for special ascii keys
 void MainWindow::on_buttonAscii_clicked()
 {
-    ascii->setGeometry(this->geometry());
-    ascii->show();
+    ui->groupBoxAscii->setVisible(ui->buttonAscii->isChecked());
 }
 
-/// @brief Ascii window closed, send char if possible
-void MainWindow::ascii_callback(bool send, QChar c){
-    if(send){
-        if(tcpServerConnectionValid){
-            if(tcpServerConnection->ConnectedState == QAbstractSocket::ConnectedState){
-                QString text; text.number(c.toLatin1());
-                text.prepend("\\x");
-                QByteArray t; t.append(c);
-                tcpServerConnection->write(t);
-                QCursor c = ui->textOutput->cursor();
+/// @brief Ascii button clicked, send char if possible
+void MainWindow::on_AnyAsciiClicked(){
+    // Get the event sender, QObject is like a void *
+    QPushButton *pb = (QPushButton *)this->sender();
+
+    // Convert the hex code from the pushbutton string to a qchar
+    QStringList t = pb->text().split(QRegExp("[\(\)]"));
+    QChar c = t[1].toInt(0,16);
+
+    if(tcpServerConnectionValid){
+        if(tcpServerConnection->ConnectedState == QAbstractSocket::ConnectedState){
+            QString text; text.number(c.toLatin1());
+            text.prepend("\\x");
+            QByteArray t; t.append(c);
+            tcpServerConnection->write(t);
+            totalBytesTransmitted += t.count();
+            QCursor c = ui->textOutput->cursor();
+            ui->textOutput->moveCursor(QTextCursor::End);
+            ui->textOutput->insertPlainText(text);
+            if(ui->boxAutoScrollOutput->checkState()==Qt::Checked)
                 ui->textOutput->moveCursor(QTextCursor::End);
-                ui->textOutput->insertPlainText(text);
-                if(ui->boxAutoScrollOutput->checkState()==Qt::Checked)
-                    ui->textOutput->moveCursor(QTextCursor::End);
-                else
-                    ui->textOutput->setCursor(c);
+            else
+                ui->textOutput->setCursor(c);
+        }
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    QWidget *p = this->focusWidget();
+    if(p == ui->lineEditFilter){
+        switch(event->key()){
+        case Qt::Key_Up:
+            if(ui->listFilter->currentRow() > 0)
+                ui->listFilter->setCurrentRow(ui->listFilter->currentRow() - 1);
+            break;
+        case Qt::Key_Down:
+            if(ui->listFilter->currentRow()+ 1 < ui->listFilter->count())
+                ui->listFilter->setCurrentRow(ui->listFilter->currentRow() + 1);
+            break;
+        default:
+            break;
+        }
+    }else if(p == ui->lineEditSend){
+        if(sendHistory.count()){
+            switch(event->key()){
+            case Qt::Key_Up:
+                currentHistoryView--;
+                /// @todo history load
+                break;
+            case Qt::Key_Down:
+                currentHistoryView++;
+                /// @todo history load
+                break;
+            default:
+                break;
             }
         }
     }
