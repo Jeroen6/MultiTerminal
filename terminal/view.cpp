@@ -65,8 +65,11 @@ void View::write(QString data){
         totalBytesInView += data.count();
         if(ui->checkPrefixHide->isChecked())
             data.remove(QRegularExpression(QString("^")+filter));
-        data.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
-        data.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
+        data = data.toHtmlEscaped();
+        data.replace(QChar('\n'),QString(""));
+        data.replace(QChar('\r'),QString(""));
+        //data.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
+        //data.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
         QCursor c = ui->textInput->cursor();
         ui->textInput->append(data);
         if(ui->checkAutoScroll->checkState()==Qt::Checked)

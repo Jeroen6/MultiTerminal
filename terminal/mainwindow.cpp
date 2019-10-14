@@ -477,8 +477,11 @@ void MainWindow::newData(){
         QString line = lineAssembler->pull_line();
         filters->write(line);
         if(ui->listFilter->item(0)->checkState() == Qt::Checked){
-            line.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
-            line.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
+            line = line.toHtmlEscaped();
+            line.replace(QChar('\n'),QString(""));
+            line.replace(QChar('\r'),QString(""));
+            //line.replace(QChar('\n'),QString("<font color=\"red\">\\n<\font>"));
+            //line.replace(QChar('\r'),QString("<font color=\"red\">\\r<\font>"));
             // Autoscroll
             QCursor c = ui->textInput->cursor();
             ui->textInput->append(line);

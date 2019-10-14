@@ -17,6 +17,7 @@
 #include <QObject>
 #include <QProcess>
 #include <QMessageBox>
+#include <QDebug>
 #include "drivermanager.h"
 
 DriverManager::DriverManager(Config::TerminalSettings_t *s)
