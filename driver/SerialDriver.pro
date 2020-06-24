@@ -11,6 +11,7 @@ QT       -= gui
 TARGET = SerialDriver
 CONFIG   += console
 CONFIG   -= app_bundle
+CONFIG += file_copies
 
 TEMPLATE = app
 
@@ -27,3 +28,4 @@ HEADERS += \
 OTHER_FILES += \
     BUGS.txt \
     TODO.txt
+

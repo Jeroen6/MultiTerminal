@@ -19,6 +19,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QCoreApplication::setApplicationVersion(APP_VERSION);
+    QCoreApplication::setApplicationName(APP_PRODUCT);
+    QCoreApplication::setOrganizationName(APP_COMPANY);
+    QCoreApplication::setOrganizationDomain("github.com/jeroen6");
     MainWindow w;
     w.show();
 

@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     QTextStream cout(stdout);
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName("SerialDriver");
-    QCoreApplication::setApplicationVersion("(build: "__DATE__" "__TIME__")");
+    QCoreApplication::setApplicationVersion("(build: " __DATE__ " " __TIME__ ")");
 
     // Visibility endline
     cout << endl;

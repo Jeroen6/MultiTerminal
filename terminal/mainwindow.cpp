@@ -820,7 +820,7 @@ void MainWindow::on_AnyAsciiClicked(){
     QPushButton *pb = (QPushButton *)this->sender();
 
     // Convert the hex code from the pushbutton string to a qchar
-    QStringList t = pb->text().split(QRegExp("[\(\)]"));
+    QStringList t = pb->text().split(QRegExp("[\\(\\)]"));
     QChar c = t[1].toInt(0,16);
 
     if(tcpServerConnectionValid){
